@@ -48,7 +48,7 @@ private extension RunestoneObserverMacro {
            ) {
                _observerRegistry.registerObserver(
                    observing: keyPath,
-                   on: observable,
+                   of: observable,
                    receiving: changeType,
                    options: options,
                    handler: handler

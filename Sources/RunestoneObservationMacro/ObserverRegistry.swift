@@ -13,7 +13,7 @@ public final class ObserverRegistry: Observer {
 
     public func registerObserver<ObservableType: Observable, T>(
         observing keyPath: KeyPath<ObservableType, T>,
-        on observable: ObservableType,
+        of observable: ObservableType,
         receiving changeType: PropertyChangeType,
         options: ObservationOptions = [],
         handler: @escaping ObservationChangeHandler<T>
