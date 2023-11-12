@@ -1,0 +1,58 @@
+import SwiftSyntaxMacros
+import SwiftSyntaxMacrosTestSupport
+import XCTest
+#if canImport(RunestoneObservationMacros)
+import RunestoneObservationMacros
+
+private let testMacros: [String: Macro.Type] = [
+    "RunestoneObserver": RunestoneObserverMacro.self
+]
+#endif
+
+final class RunestoneObserverMacroTests: XCTestCase {
+    func testItGeneratesGeneratesObserverConformance() throws {
+        #if canImport(RunestoneObservationMacros)
+        assertMacroExpansion(
+            """
+            @RunestoneObserver
+            final class ViewModel {
+
+            }
+            """,
+            expandedSource: """
+            final class ViewModel {
+
+                private let _observerRegistry = RunestoneObservationMacro.ObserverRegistry()
+
+                func observe<T: RunestoneObservationMacro.Observable, U>(
+                    _ keyPath: KeyPath<T, U>,
+                    of observable: T,
+                    receiving changeType: RunestoneObservationMacro.PropertyChangeType = .didSet,
+                    options: RunestoneObservationMacro.ObservationOptions = [],
+                    handler: @escaping RunestoneObservationMacro.ObservationChangeHandler<U>
+                ) {
+                    _observerRegistry.registerObserver(
+                        observing: keyPath,
+                        on: observable,
+                        receiving: changeType,
+                        options: options,
+                        handler: handler
+                    )
+                }
+
+                func cancelObservation(withId observationId: RunestoneObservationMacro.ObservationId) {
+                    _observerRegistry.cancelObservation(withId: observationId)
+                }
+            
+            }
+            
+            extension ViewModel: RunestoneObservationMacro.Observer {
+            }
+            """,
+            macros: testMacros
+        )
+        #else
+        throw XCTSkip("macros are only supported when running tests for the host platform")
+        #endif
+    }
+}
