@@ -19,8 +19,7 @@ public macro RunestoneObservationTracked() = #externalMacro(
 )
 
 
-@attached(member, names: named(_observerRegistry), named(observe), named(cancelObservation))
-@attached(extension, conformances: Observer)
+@attached(member, names: named(_observerRegistry), named(observe))
 public macro RunestoneObserver() = #externalMacro(
     module: "RunestoneObservationMacros",
     type: "RunestoneObserverMacro"

@@ -21,35 +21,8 @@ extension RunestoneObserverMacro: MemberMacro {
         }
         return [
             try makeObserverRegistryVariable(),
-            try makeObserveFunction(),
-            try makeCancelObservationFunction()
+            try makeObserveFunction()
         ]
-    }
-}
-
-extension RunestoneObserverMacro: ExtensionMacro {
-    public static func expansion(
-        of node: AttributeSyntax,
-        attachedTo declaration: some DeclGroupSyntax,
-        providingExtensionsOf type: some TypeSyntaxProtocol,
-        conformingTo protocols: [TypeSyntax],
-        in context: some MacroExpansionContext
-    ) throws -> [ExtensionDeclSyntax] {
-        guard let classDecl = declaration.as(ClassDeclSyntax.self) else {
-           throw DiagnosticsError(diagnostics: [
-                Diagnostic(
-                    node: declaration,
-                    message: RunestoneMacroDiagnostic.onlyApplicableToClass
-                )
-            ])
-        }
-        let className = classDecl.name.text
-        let syntax = try ExtensionDeclSyntax(
-           """
-           extension \(raw: className): RunestoneObservationMacro.Observer {}
-           """
-        )
-        return [syntax]
     }
 }
 
@@ -80,17 +53,6 @@ private extension RunestoneObserverMacro {
                    options: options,
                    handler: handler
                )
-           }
-           """
-        )
-        return DeclSyntax(syntax)
-    }
-
-    private static func makeCancelObservationFunction() throws -> DeclSyntax {
-        let syntax = try FunctionDeclSyntax(
-           """
-           func cancelObservation(withId observationId: RunestoneObservationMacro.ObservationId) {
-               _observerRegistry.cancelObservation(withId: observationId)
            }
            """
         )

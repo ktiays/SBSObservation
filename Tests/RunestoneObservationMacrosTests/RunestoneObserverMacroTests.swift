@@ -40,13 +40,6 @@ final class RunestoneObserverMacroTests: XCTestCase {
                     )
                 }
 
-                func cancelObservation(withId observationId: RunestoneObservationMacro.ObservationId) {
-                    _observerRegistry.cancelObservation(withId: observationId)
-                }
-            
-            }
-            
-            extension ViewModel: RunestoneObservationMacro.Observer {
             }
             """,
             macros: testMacros
