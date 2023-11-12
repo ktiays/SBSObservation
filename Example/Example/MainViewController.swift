@@ -8,8 +8,8 @@ final class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        observe(\.speed, of: car) { [weak self] _, newValue in
-            self?.contentView.speedLabel.text = "\(newValue) mph"
+        observe(\.speed, of: car) { [unowned self] _, newValue in
+            self.contentView.speedLabel.text = "\(newValue) mph"
         }
         contentView.presentButton.addTarget(self, action: #selector(presentNextScreen), for: .touchUpInside)
         car.drive()
