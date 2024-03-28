@@ -1,4 +1,4 @@
-@testable import RunestoneObservationMacro
+@testable import RunestoneObservation
 
 final class MockObserver: Observer {
     private(set) var didCancel = false

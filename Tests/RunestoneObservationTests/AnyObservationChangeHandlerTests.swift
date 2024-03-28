@@ -1,4 +1,4 @@
-@testable import RunestoneObservationMacro
+@testable import RunestoneObservation
 import XCTest
 
 final class AnyObservationChangeHandlerTests: XCTestCase {

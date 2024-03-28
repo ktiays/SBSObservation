@@ -1,4 +1,4 @@
-@testable import RunestoneObservationMacro
+@testable import RunestoneObservation
 
 final class ObservationStoreSpy: ObservationStore {
     var observations: [Observation] {

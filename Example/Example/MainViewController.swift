@@ -1,4 +1,4 @@
-import RunestoneObservationMacro
+import RunestoneObservation
 import UIKit
 
 @RunestoneObserver

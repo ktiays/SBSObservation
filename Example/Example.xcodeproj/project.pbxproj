@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,7 +12,7 @@
 		726161E12B0121DC001698AE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726161E02B0121DC001698AE /* MainViewController.swift */; };
 		726161E62B0121DD001698AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 726161E52B0121DD001698AE /* Assets.xcassets */; };
 		726161E92B0121DD001698AE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 726161E72B0121DD001698AE /* LaunchScreen.storyboard */; };
-		72E761382B018A3F00C0F676 /* RunestoneObservationMacro in Frameworks */ = {isa = PBXBuildFile; productRef = 72E761372B018A3F00C0F676 /* RunestoneObservationMacro */; };
+		729861042BB53F6D009F8ADF /* RunestoneObservation in Frameworks */ = {isa = PBXBuildFile; productRef = 729861032BB53F6D009F8ADF /* RunestoneObservation */; };
 		72E7613A2B018A4900C0F676 /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E761392B018A4900C0F676 /* Car.swift */; };
 		72E7613C2B018A8D00C0F676 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E7613B2B018A8D00C0F676 /* MainView.swift */; };
 /* End PBXBuildFile section */
@@ -25,6 +25,7 @@
 		726161E52B0121DD001698AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		726161E82B0121DD001698AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		726161EA2B0121DD001698AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		729861012BB53F5A009F8ADF /* RunestoneObservation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RunestoneObservation; path = ..; sourceTree = "<group>"; };
 		72E761392B018A4900C0F676 /* Car.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
 		72E7613B2B018A8D00C0F676 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -34,7 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				72E761382B018A3F00C0F676 /* RunestoneObservationMacro in Frameworks */,
+				729861042BB53F6D009F8ADF /* RunestoneObservation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +45,7 @@
 		726161D02B0121DC001698AE = {
 			isa = PBXGroup;
 			children = (
+				729861012BB53F5A009F8ADF /* RunestoneObservation */,
 				726161DB2B0121DC001698AE /* Example */,
 				726161DA2B0121DC001698AE /* Products */,
 				726703112B01697A0014E56D /* Frameworks */,
@@ -97,7 +99,7 @@
 			);
 			name = Example;
 			packageProductDependencies = (
-				72E761372B018A3F00C0F676 /* RunestoneObservationMacro */,
+				729861032BB53F6D009F8ADF /* RunestoneObservation */,
 			);
 			productName = Example;
 			productReference = 726161D92B0121DC001698AE /* Example.app */;
@@ -128,7 +130,6 @@
 			);
 			mainGroup = 726161D02B0121DC001698AE;
 			packageReferences = (
-				72E761362B018A3F00C0F676 /* XCLocalSwiftPackageReference ".." */,
 			);
 			productRefGroup = 726161DA2B0121DC001698AE /* Products */;
 			projectDirPath = "";
@@ -374,17 +375,10 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		72E761362B018A3F00C0F676 /* XCLocalSwiftPackageReference ".." */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ..;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		72E761372B018A3F00C0F676 /* RunestoneObservationMacro */ = {
+		729861032BB53F6D009F8ADF /* RunestoneObservation */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = RunestoneObservationMacro;
+			productName = RunestoneObservation;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

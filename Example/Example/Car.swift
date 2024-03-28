@@ -1,5 +1,5 @@
 import Foundation
-import RunestoneObservationMacro
+import RunestoneObservation
 
 @RunestoneObservable
 final class Car {
