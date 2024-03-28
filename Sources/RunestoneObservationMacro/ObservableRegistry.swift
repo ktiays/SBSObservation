@@ -1,37 +1,44 @@
 public final class ObservableRegistry<ObservableType: Observable> {
     private var observationStore: ObservationStore
-    private var propertyChangeIdCatalog: PropertyChangeIdCatalog
 
     public convenience init() {
-        let observationStore = DictionaryObservationStore()
-        let propertyChangeIdCatalog = DictionaryPropertyChangeIdCatalog()
-        self.init(observationStore: observationStore, propertyChangeIdCatalog: propertyChangeIdCatalog)
+        self.init(storingIn: DictionaryObservationStore())
     }
 
-    init<ObservationStoreType: ObservationStore, PropertyChangeIdCatalogType: PropertyChangeIdCatalog>(
-        observationStore: ObservationStoreType,
-        propertyChangeIdCatalog: PropertyChangeIdCatalogType
-    ) {
+    init<ObservationStoreType: ObservationStore>(storingIn observationStore: ObservationStoreType) {
         self.observationStore = observationStore
-        self.propertyChangeIdCatalog = propertyChangeIdCatalog
     }
 
     deinit {
         deregisterAllObservers()
-        print("Deinit \(type(of: self))")
     }
 
-    public func publishChange<T>(
-        ofType changeType: PropertyChangeType,
-        changing keyPath: KeyPath<ObservableType, T>,
+    public func mutating<T>(
+        _ keyPath: KeyPath<ObservableType, T>,
         on observable: ObservableType,
-        from oldValue: T,
-        to newValue: T
+        changingFrom oldValue: T,
+        to newValue: T,
+        using handler: () -> Void
     ) {
-        let propertyChangeId = PropertyChangeId(for: observable, publishing: changeType, of: keyPath)
-        let observations = propertyChangeIdCatalog.observations(for: propertyChangeId)
-        for observation in observations {
-            observation.handler.invoke(changingFrom: oldValue, to: newValue)
+        publishChange(ofType: .willSet, changing: keyPath, on: observable, from: oldValue, to: newValue)
+        handler()
+        publishChange(ofType: .didSet, changing: keyPath, on: observable, from: oldValue, to: newValue)
+    }
+
+    public func mutating<T: Equatable>(
+        _ keyPath: KeyPath<ObservableType, T>,
+        on observable: ObservableType,
+        changingFrom oldValue: T,
+        to newValue: T,
+        handler: () -> Void
+    ) {
+        let isDifferentValue = oldValue != newValue
+        if isDifferentValue {
+            publishChange(ofType: .willSet, changing: keyPath, on: observable, from: oldValue, to: newValue)
+        }
+        handler()
+        if isDifferentValue {
+            publishChange(ofType: .didSet, changing: keyPath, on: observable, from: oldValue, to: newValue)
         }
     }
 
@@ -50,7 +57,6 @@ public final class ObservableRegistry<ObservableType: Observable> {
             handler: handler
         )
         observationStore.addObservation(observation)
-        propertyChangeIdCatalog.addObservation(observation, for: propertyChangeId)
         if options.contains(.initialValue) {
             let initialValue = observable[keyPath: keyPath]
             handler(initialValue, initialValue)
@@ -59,11 +65,27 @@ public final class ObservableRegistry<ObservableType: Observable> {
     }
 
     public func cancelObservation(withId observationId: ObservationId) {
-        guard let observation = observationStore.observation(withId: observationId) else {
-            return
-        }
-        propertyChangeIdCatalog.removeObservation(observation, for: observation.propertyChangeId)
         observationStore.removeObservation(withId: observationId)
+    }
+}
+
+extension ObservableRegistry {
+    func publishChange<T>(
+        ofType changeType: PropertyChangeType,
+        changing keyPath: KeyPath<ObservableType, T>,
+        on observable: ObservableType,
+        from oldValue: T,
+        to newValue: T
+    ) {
+        do {
+            let propertyChangeId = PropertyChangeId(for: observable, publishing: changeType, of: keyPath)
+            let observations = observationStore.observations(for: propertyChangeId)
+            for observation in observations {
+                try observation.handler.invoke(changingFrom: oldValue, to: newValue)
+            }
+        } catch {
+            fatalError(error.localizedDescription)
+        }
     }
 }
 
@@ -73,6 +95,5 @@ private extension ObservableRegistry {
             observation.invokeCancelOnObserver()
         }
         observationStore.removeAll()
-        propertyChangeIdCatalog.removeAll()
     }
 }

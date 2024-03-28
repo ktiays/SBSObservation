@@ -6,7 +6,7 @@ import CompilerPluginSupport
 
 let package = Package(
     name: "RunestoneObservationMacro",
-    platforms: [.macOS(.v10_15), .iOS(.v12)],
+    platforms: [.macOS(.v10_15), .iOS(.v13)],
     products: [
         .library(name: "RunestoneObservationMacro", targets: [
             "RunestoneObservationMacro"
@@ -25,6 +25,7 @@ let package = Package(
         ]),
         .testTarget(name: "RunestoneObservationMacrosTests", dependencies: [
             "RunestoneObservationMacros",
+            "RunestoneObservationMacro",
             .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax")
         ])
     ]

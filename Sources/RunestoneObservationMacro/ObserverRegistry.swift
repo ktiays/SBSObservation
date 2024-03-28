@@ -1,15 +1,13 @@
 public final class ObserverRegistry: Observer {
-    private final class WeakObservabe {
-        private(set) weak var observable: (any Observable)?
+    private var observableStore: ObservableStore
 
-        init(_ observable: any Observable) {
-            self.observable = observable
-        }
+    public convenience init() {
+        self.init(observableStore: DictionaryObservableStore())
     }
 
-    private var observables: [ObservationId: WeakObservabe] = [:]
-
-    public init() {}
+    init(observableStore: ObservableStore) {
+        self.observableStore = observableStore
+    }
 
     public func registerObserver<ObservableType: Observable, T>(
         observing keyPath: KeyPath<ObservableType, T>,
@@ -25,24 +23,24 @@ public final class ObserverRegistry: Observer {
             options: options,
             handler: handler
         )
-        observables[observationId] = WeakObservabe(observable)
+        observableStore.addObservable(observable, for: observationId)
     }
 
     public func cancelObservation(withId observationId: ObservationId) {
-        observables.removeValue(forKey: observationId)
+        observableStore.removeObservable(for: observationId)
     }
 
     deinit {
         deregisterFromAllObservables()
-        print("Deinit \(type(of: self))")
     }
 }
 
 private extension ObserverRegistry {
     private func deregisterFromAllObservables() {
-        for (observationId, weakObservable) in observables {
-            weakObservable.observable?.cancelObservation(withId: observationId)
+        for observationId in observableStore.observationIds {
+            let observable = observableStore.observable(for: observationId)
+            observable?.cancelObservation(withId: observationId)
         }
-        observables = [:]
+        observableStore.removeAll()
     }
 }
