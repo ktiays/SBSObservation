@@ -13,11 +13,29 @@ final class MainView: UIView {
         this.configuration?.title = "Present"
         return this
     }()
-    private let stackView: UIStackView = {
+    let decreaseSpeedButton: UIButton = {
+        let this = UIButton(configuration: .borderedProminent())
+        this.configuration?.image = UIImage(systemName: "arrowtriangle.down.square")
+        return this
+    }()
+    let increaseSpeedButton: UIButton = {
+        let this = UIButton(configuration: .borderedProminent())
+        this.configuration?.image = UIImage(systemName: "arrowtriangle.up.square")
+        return this
+    }()
+    private let buttonsStackView: UIStackView = {
+        let this = UIStackView()
+        this.translatesAutoresizingMaskIntoConstraints = false
+        this.axis = .horizontal
+        this.spacing = 40
+        this.alignment = .center
+        return this
+    }()
+    private let contentStackView: UIStackView = {
         let this = UIStackView()
         this.translatesAutoresizingMaskIntoConstraints = false
         this.axis = .vertical
-        this.spacing = 20
+        this.spacing = 40
         this.alignment = .center
         return this
     }()
@@ -34,18 +52,22 @@ final class MainView: UIView {
 
     private func setupView() {
         backgroundColor = .systemBackground
-        stackView.addArrangedSubview(speedLabel)
-        stackView.addArrangedSubview(presentButton)
-        addSubview(stackView)
+        buttonsStackView.addArrangedSubview(decreaseSpeedButton)
+        buttonsStackView.addArrangedSubview(increaseSpeedButton)
+        contentStackView.addArrangedSubview(speedLabel)
+        contentStackView.addArrangedSubview(buttonsStackView)
+        contentStackView.addArrangedSubview(presentButton)
+        contentStackView.setCustomSpacing(80, after: buttonsStackView)
+        addSubview(contentStackView)
     }
 
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-            stackView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
-            stackView.centerYAnchor.constraint(equalTo: centerYAnchor)
+            contentStackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            contentStackView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
+            contentStackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+            contentStackView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 }

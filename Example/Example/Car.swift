@@ -1,16 +1,21 @@
 import Foundation
 import RunestoneObservation
 
-@RunestoneObservable
-final class Car {
-    var speed: Int = 0
+protocol Car: RunestoneObservation.Observable {
+    var speed: Int { get }
+    func decreaseSpeed()
+    func increaseSpeed()
 }
 
-extension Car {
-    func drive() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + TimeInterval.random(in: 0.3 ... 1)) { [weak self] in
-            self?.speed += Int.random(in: -10 ... 10)
-            self?.drive()
-        }
+@RunestoneObservable
+final class Volvo: Car {
+    private(set) var speed: Int = 0
+
+    func decreaseSpeed() {
+        speed -= 1
+    }
+
+    func increaseSpeed() {
+        speed += 1
     }
 }
