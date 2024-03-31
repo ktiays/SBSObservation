@@ -3,11 +3,13 @@ import UIKit
 
 @RunestoneObserver
 final class MainViewController<CarType: Car>: UIViewController {
-    private let car: CarType
+    private let carA: CarType
+    private let carB: CarType
     private let contentView = MainView()
 
-    init(car: CarType) {
-        self.car = car
+    init(carA: CarType, carB: CarType) {
+        self.carA = carA
+        self.carB = carB
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -17,8 +19,11 @@ final class MainViewController<CarType: Car>: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        observe(car.speed) { oldValue, newValue in
-            print("\(oldValue) => \(newValue)")
+        observe(carA.speed) { [unowned self] oldValue, newValue in
+            print("A \(oldValue) => \(newValue)")
+        }
+        observe(carB.speed) { [unowned self] oldValue, newValue in
+            print("B \(oldValue) => \(newValue)")
         }
         contentView.presentButton.addTarget(self, action: #selector(presentNextScreen), for: .touchUpInside)
         contentView.increaseSpeedButton.addTarget(self, action: #selector(decreaseSpeed), for: .touchUpInside)
@@ -32,21 +37,22 @@ final class MainViewController<CarType: Car>: UIViewController {
 
     private func speedUp() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            self?.car.increaseSpeed()
+            self?.carA.increaseSpeed()
+//            self?.carB.increaseSpeed()
             self?.speedUp()
         }
     }
 
     @objc private func decreaseSpeed() {
-        car.decreaseSpeed()
+        carA.decreaseSpeed()
     }
 
     @objc private func increaseSpeed() {
-        car.increaseSpeed()
+        carA.increaseSpeed()
     }
 
     @objc private func presentNextScreen() {
-        let viewController = MainViewController(car: car)
+        let viewController = MainViewController(carA: carA, carB: carB)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
