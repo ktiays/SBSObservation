@@ -24,7 +24,7 @@ final class RunestoneObservableMacroTests: XCTestCase {
                 @RunestoneObservationTracked
                 var foo: String = ""
 
-                private let _observableRegistry = RunestoneObservation.ObservableRegistry<ViewModel>()
+                private let _observationRegistrar = RunestoneObservation.ObservationRegistrar()
 
                 func registerObserver<T>(
                     _ observer: some RunestoneObservation.Observer,
@@ -33,7 +33,7 @@ final class RunestoneObservableMacroTests: XCTestCase {
                     options: RunestoneObservation.ObservationOptions = [],
                     handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
                 ) -> RunestoneObservation.ObservationId {
-                    return _observableRegistry.registerObserver(
+                    return _observationRegistrar.registerObserver(
                         observer,
                         observing: keyPath,
                         on: self,
@@ -44,7 +44,7 @@ final class RunestoneObservableMacroTests: XCTestCase {
                 }
 
                 func cancelObservation(withId observationId: RunestoneObservation.ObservationId) {
-                    _observableRegistry.cancelObservation(withId: observationId)
+                    _observationRegistrar.cancelObservation(withId: observationId)
                 }
             }
 
@@ -76,7 +76,7 @@ final class RunestoneObservableMacroTests: XCTestCase {
                 @RunestoneObservationIgnored
                 var bar: String = ""
 
-                private let _observableRegistry = RunestoneObservation.ObservableRegistry<ViewModel>()
+                private let _observationRegistrar = RunestoneObservation.ObservationRegistrar()
 
                 func registerObserver<T>(
                     _ observer: some RunestoneObservation.Observer,
@@ -85,7 +85,7 @@ final class RunestoneObservableMacroTests: XCTestCase {
                     options: RunestoneObservation.ObservationOptions = [],
                     handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
                 ) -> RunestoneObservation.ObservationId {
-                    return _observableRegistry.registerObserver(
+                    return _observationRegistrar.registerObserver(
                         observer,
                         observing: keyPath,
                         on: self,
@@ -96,7 +96,7 @@ final class RunestoneObservableMacroTests: XCTestCase {
                 }
 
                 func cancelObservation(withId observationId: RunestoneObservation.ObservationId) {
-                    _observableRegistry.cancelObservation(withId: observationId)
+                    _observationRegistrar.cancelObservation(withId: observationId)
                 }
             }
 
@@ -127,7 +127,7 @@ final class RunestoneObservableMacroTests: XCTestCase {
                 @RunestoneObservationTracked
                 var foo: String = ""
 
-                private let _observableRegistry = RunestoneObservation.ObservableRegistry<ViewModel>()
+                private let _observationRegistrar = RunestoneObservation.ObservationRegistrar()
 
                 func registerObserver<T>(
                     _ observer: some RunestoneObservation.Observer,
@@ -136,7 +136,7 @@ final class RunestoneObservableMacroTests: XCTestCase {
                     options: RunestoneObservation.ObservationOptions = [],
                     handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
                 ) -> RunestoneObservation.ObservationId {
-                    return _observableRegistry.registerObserver(
+                    return _observationRegistrar.registerObserver(
                         observer,
                         observing: keyPath,
                         on: self,
@@ -147,7 +147,7 @@ final class RunestoneObservableMacroTests: XCTestCase {
                 }
 
                 func cancelObservation(withId observationId: RunestoneObservation.ObservationId) {
-                    _observableRegistry.cancelObservation(withId: observationId)
+                    _observationRegistrar.cancelObservation(withId: observationId)
                 }
             }
 

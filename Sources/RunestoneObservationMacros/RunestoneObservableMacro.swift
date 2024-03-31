@@ -52,9 +52,9 @@ extension RunestoneObservableMacro: MemberMacro {
         }
         let typeName = identified.name.text
         return [
-            try makeObservableRegistryVariable(forTypeNamed: typeName),
-            try makeRegisterObserverFunction(forTypeNamed: typeName),
-            try makeDeregisterObserverFunction()
+            try makeObservationRegistrarVariable(forTypeNamed: typeName),
+//            try makeRegisterObserverFunction(forTypeNamed: typeName),
+//            try makeCancelObservationFunction()
         ]
     }
 }
@@ -87,10 +87,10 @@ extension RunestoneObservableMacro: ExtensionMacro {
 }
 
 private extension RunestoneObservableMacro {
-    private static func makeObservableRegistryVariable(forTypeNamed typeName: String) throws -> DeclSyntax {
+    private static func makeObservationRegistrarVariable(forTypeNamed typeName: String) throws -> DeclSyntax {
         let syntax = try VariableDeclSyntax(
            """
-           private let _observableRegistry = RunestoneObservation.ObservableRegistry<\(raw: typeName)>()
+           private let _observationRegistrar = RunestoneObservation.ObservationRegistrar()
            """
         )
         return DeclSyntax(syntax)
@@ -106,7 +106,7 @@ private extension RunestoneObservableMacro {
                options: RunestoneObservation.ObservationOptions = [],
                handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
            ) -> RunestoneObservation.ObservationId {
-               return _observableRegistry.registerObserver(
+               _observationRegistrar.registerObserver(
                    observer,
                    observing: keyPath,
                    on: self,
@@ -120,11 +120,11 @@ private extension RunestoneObservableMacro {
         return DeclSyntax(syntax)
     }
 
-    private static func makeDeregisterObserverFunction() throws -> DeclSyntax {
+    private static func makeCancelObservationFunction() throws -> DeclSyntax {
         let syntax = try FunctionDeclSyntax(
            """
            func cancelObservation(withId observationId: RunestoneObservation.ObservationId) {
-               _observableRegistry.cancelObservation(withId: observationId)
+               _observationRegistrar.cancelObservation(withId: observationId)
            }
            """
         )

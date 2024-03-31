@@ -20,17 +20,17 @@ extension RunestoneObserverMacro: MemberMacro {
             return []
         }
         return [
-            try makeObserverRegistryVariable(),
+            try makeObservationRegistrarVariable(),
             try makeObserveFunction()
         ]
     }
 }
 
 private extension RunestoneObserverMacro {
-    private static func makeObserverRegistryVariable() throws -> DeclSyntax {
+    private static func makeObservationRegistrarVariable() throws -> DeclSyntax {
         let syntax = try VariableDeclSyntax(
            """
-           private let _observerRegistry = RunestoneObservation.ObserverRegistry()
+           private let _observationRegistrar = RunestoneObservation.ObservationRegistrar()
            """
         )
         return DeclSyntax(syntax)
@@ -39,16 +39,14 @@ private extension RunestoneObserverMacro {
     private static func makeObserveFunction() throws -> DeclSyntax {
         let syntax = try FunctionDeclSyntax(
            """
-           func observe<T: RunestoneObservation.Observable, U>(
-               _ keyPath: KeyPath<T, U>,
-               of observable: T,
+           func observe<T>(
+               _ tracker: @autoclosure () -> T,
                receiving changeType: RunestoneObservation.PropertyChangeType = .didSet,
                options: RunestoneObservation.ObservationOptions = [],
-               handler: @escaping RunestoneObservation.ObservationChangeHandler<U>
+               handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
            ) {
-               _observerRegistry.registerObserver(
-                   observing: keyPath,
-                   of: observable,
+               _observationRegistrar.registerObserver(
+                   tracking: tracker(),
                    receiving: changeType,
                    options: options,
                    handler: handler

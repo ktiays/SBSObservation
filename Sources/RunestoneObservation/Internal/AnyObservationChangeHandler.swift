@@ -1,7 +1,7 @@
-struct AnyObservationChangeHandler {
-    private let handler: (Any, Any) throws -> Void
+struct AnyObservationChangeHandler: Sendable {
+    private let handler: @Sendable (Any, Any) throws -> Void
 
-    init<T>(_ handler: @escaping (T, T) -> Void) {
+    init<T>(_ handler: @Sendable @escaping (T, T) -> Void) {
         self.handler = { oldValue, newValue in
             guard let typedOldValue = oldValue as? T else {
                 throw ObservationError.mismatchOldValueType(

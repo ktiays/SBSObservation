@@ -17,16 +17,24 @@ final class MainViewController<CarType: Car>: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        observe(\.speed, of: car) { [unowned self] _, newValue in
-            self.contentView.speedLabel.text = "\(newValue) mph"
+        observe(car.speed) { oldValue, newValue in
+            print("\(oldValue) => \(newValue)")
         }
         contentView.presentButton.addTarget(self, action: #selector(presentNextScreen), for: .touchUpInside)
         contentView.increaseSpeedButton.addTarget(self, action: #selector(decreaseSpeed), for: .touchUpInside)
         contentView.increaseSpeedButton.addTarget(self, action: #selector(increaseSpeed), for: .touchUpInside)
+        speedUp()
     }
 
     override func loadView() {
         view = contentView
+    }
+
+    private func speedUp() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.car.increaseSpeed()
+            self?.speedUp()
+        }
     }
 
     @objc private func decreaseSpeed() {

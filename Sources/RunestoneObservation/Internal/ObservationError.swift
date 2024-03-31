@@ -7,9 +7,9 @@ enum ObservationError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .mismatchOldValueType(let expectedType, let actualType):
-            return "Receieved old value of unexpected type \(actualType) but expected \(expectedType)"
+            "Receieved old value of unexpected type \(actualType) but expected \(expectedType)"
         case .mismatchNewValueType(let expectedType, let actualType):
-            return "Receieved new value of unexpected type \(actualType) but expected \(expectedType)"
+            "Receieved new value of unexpected type \(actualType) but expected \(expectedType)"
         }
     }
 }
