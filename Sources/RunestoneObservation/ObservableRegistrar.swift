@@ -152,9 +152,7 @@ public final class ObservableRegistrar {
     }
 
     public func access<Subject: Observable, T>(_ keyPath: KeyPath<Subject, T>, on subject: Subject) {
-        guard let trackingPtr = ThreadLocal.value?.assumingMemoryBound(
-            to: ObservationTracking.AccessList?.self
-        ) else {
+        guard let trackingPtr = ThreadLocal.value?.assumingMemoryBound(to: ObservationTracking.AccessList?.self) else {
             return
         }
         if trackingPtr.pointee == nil {

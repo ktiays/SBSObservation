@@ -13,10 +13,7 @@ struct ObservationTracking {
             self.properties = properties
         }
 
-        func addObserver(
-            receiving changeType: PropertyChangeType,
-            changeHandler: AnyObservationChangeHandler
-        ) -> Int {
+        func addObserver(receiving changeType: PropertyChangeType, changeHandler: AnyObservationChangeHandler) -> Int {
             context.registerTracking(of: properties, receiving: changeType, changeHandler: changeHandler)
         }
 
@@ -32,7 +29,7 @@ struct ObservationTracking {
     struct AccessList: Sendable {
         private(set) var entries: [ObjectIdentifier: Entry] = [:]
 
-        init() { }
+        init() {}
 
         mutating func addAccess<Subject: Observable>(
             keyPath: PartialKeyPath<Subject>,
