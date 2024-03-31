@@ -5,8 +5,8 @@ struct ObservationTracking {
     }
 
     struct Entry: @unchecked Sendable {
-        let context: ObservableRegistrar.Context
-        private(set) var properties: Set<AnyKeyPath>
+        private let context: ObservableRegistrar.Context
+        private var properties: Set<AnyKeyPath>
 
         init(_ context: ObservableRegistrar.Context, properties: Set<AnyKeyPath> = []) {
             self.context = context
@@ -30,7 +30,7 @@ struct ObservationTracking {
     }
 
     struct AccessList: Sendable {
-        var entries: [ObjectIdentifier: Entry] = [:]
+        private(set) var entries: [ObjectIdentifier: Entry] = [:]
 
         init() { }
 
