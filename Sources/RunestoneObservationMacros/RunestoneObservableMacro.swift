@@ -52,7 +52,7 @@ extension RunestoneObservableMacro: MemberMacro {
         }
         let typeName = identified.name.text
         return [
-            try makeObservationRegistrarVariable(forTypeNamed: typeName),
+            try makeObservableRegistrarVariable(forTypeNamed: typeName),
 //            try makeRegisterObserverFunction(forTypeNamed: typeName),
 //            try makeCancelObservationFunction()
         ]
@@ -87,10 +87,10 @@ extension RunestoneObservableMacro: ExtensionMacro {
 }
 
 private extension RunestoneObservableMacro {
-    private static func makeObservationRegistrarVariable(forTypeNamed typeName: String) throws -> DeclSyntax {
+    private static func makeObservableRegistrarVariable(forTypeNamed typeName: String) throws -> DeclSyntax {
         let syntax = try VariableDeclSyntax(
            """
-           private let _observationRegistrar = RunestoneObservation.ObservationRegistrar()
+           private let _observableRegistrar = RunestoneObservation.ObservableRegistrar()
            """
         )
         return DeclSyntax(syntax)
@@ -106,7 +106,7 @@ private extension RunestoneObservableMacro {
                options: RunestoneObservation.ObservationOptions = [],
                handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
            ) -> RunestoneObservation.ObservationId {
-               _observationRegistrar.registerObserver(
+               _observableRegistrar.registerObserver(
                    observer,
                    observing: keyPath,
                    on: self,
@@ -124,7 +124,7 @@ private extension RunestoneObservableMacro {
         let syntax = try FunctionDeclSyntax(
            """
            func cancelObservation(withId observationId: RunestoneObservation.ObservationId) {
-               _observationRegistrar.cancelObservation(withId: observationId)
+               _observableRegistrar.cancelObservation(withId: observationId)
            }
            """
         )

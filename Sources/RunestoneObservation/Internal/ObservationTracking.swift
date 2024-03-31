@@ -5,10 +5,10 @@ struct ObservationTracking {
     }
 
     struct Entry: @unchecked Sendable {
-        let context: ObservationRegistrar.Context
+        let context: ObservableRegistrar.Context
         private(set) var properties: Set<AnyKeyPath>
 
-        init(_ context: ObservationRegistrar.Context, properties: Set<AnyKeyPath> = []) {
+        init(_ context: ObservableRegistrar.Context, properties: Set<AnyKeyPath> = []) {
             self.context = context
             self.properties = properties
         }
@@ -36,7 +36,7 @@ struct ObservationTracking {
 
         mutating func addAccess<Subject: Observable>(
             keyPath: PartialKeyPath<Subject>,
-            context: ObservationRegistrar.Context
+            context: ObservableRegistrar.Context
         ) {
             entries[context.id, default: Entry(context)].insert(keyPath)
         }

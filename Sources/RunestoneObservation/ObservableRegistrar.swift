@@ -1,20 +1,20 @@
-public final class ObservationRegistrar {
+public final class ObservableRegistrar {
     struct State: @unchecked Sendable {
         struct Observation {
             let properties: Set<AnyKeyPath>
             let changeType: PropertyChangeType
             let changeHandler: AnyObservationChangeHandler
         }
-        
+
         private var id = 0
         private var observations: [Int: Observation] = [:]
         private var lookups: [AnyKeyPath: Set<Int>] = [:]
-        
+
         mutating func generateId() -> Int {
             defer { id &+= 1 }
             return id
         }
-        
+
         mutating func registerTracking(
             of properties: Set<AnyKeyPath>,
             receiving changeType: PropertyChangeType,
@@ -31,7 +31,7 @@ public final class ObservationRegistrar {
             }
             return id
         }
-        
+
         mutating func cancelAll() {
             print(observations)
             print(lookups)
@@ -55,14 +55,14 @@ public final class ObservationRegistrar {
             return observations
         }
     }
-    
+
     struct Context: Sendable {
         private let state = ManagedCriticalState(State())
-        
+
         var id: ObjectIdentifier {
             state.id
         }
-        
+
         func registerTracking(
             of properties: Set<AnyKeyPath>,
             receiving changeType: PropertyChangeType,
@@ -76,11 +76,11 @@ public final class ObservationRegistrar {
                 )
             }
         }
-        
-        func publishChange<ObservableType: Observable, T>(
+
+        func publishChange<Subject: Observable, T>(
             ofType changeType: PropertyChangeType,
-            changing keyPath: KeyPath<ObservableType, T>,
-            on observable: ObservableType,
+            changing keyPath: KeyPath<Subject, T>,
+            on subject: Subject,
             from oldValue: T,
             to newValue: T
         ) {
@@ -95,28 +95,20 @@ public final class ObservationRegistrar {
                 fatalError(error.localizedDescription)
             }
         }
-        
+
         func cancelAll() {
             state.withCriticalRegion { $0.cancelAll() }
         }
     }
-    
-    private final class Extent: @unchecked Sendable {
-        let context = Context()
-        
-        deinit {
-            print("Deinit \(type(of: self))")
-            context.cancelAll()
-        }
-    }
-    
-    private let extent = Extent()
-    
-    private var context: Context {
-        extent.context
-    }
+
+    private let context = Context()
 
     public init() {}
+
+    deinit {
+        print("Deinit \(type(of: self))")
+        context.cancelAll()
+    }
 
     public func withMutation<Subject: Observable, T>(
         of keyPath: KeyPath<Subject, T>,
@@ -129,7 +121,7 @@ public final class ObservationRegistrar {
         handler()
         context.publishChange(ofType: .didSet, changing: keyPath, on: observable, from: oldValue, to: newValue)
     }
-    
+
     public func withMutation<Subject: Observable, T: Equatable>(
         of keyPath: KeyPath<Subject, T>,
         on observable: Subject,
@@ -140,7 +132,7 @@ public final class ObservationRegistrar {
         let isDifferentValue = oldValue != newValue
         if isDifferentValue {
             context.publishChange(
-                ofType: .willSet, 
+                ofType: .willSet,
                 changing: keyPath,
                 on: observable,
                 from: oldValue,
@@ -150,7 +142,7 @@ public final class ObservationRegistrar {
         handler()
         if isDifferentValue {
             context.publishChange(
-                ofType: .didSet, 
+                ofType: .didSet,
                 changing: keyPath,
                 on: observable,
                 from: oldValue,
@@ -158,11 +150,8 @@ public final class ObservationRegistrar {
             )
         }
     }
-    
-    public func access<ObservableType: Observable, T>(
-        _ keyPath: KeyPath<ObservableType, T>, 
-        on observable: ObservableType
-    ) {
+
+    public func access<Subject: Observable, T>(_ keyPath: KeyPath<Subject, T>, on subject: Subject) {
         guard let trackingPtr = ThreadLocal.value?.assumingMemoryBound(
             to: ObservationTracking.AccessList?.self
         ) else {
@@ -172,41 +161,5 @@ public final class ObservationRegistrar {
             trackingPtr.pointee = ObservationTracking.AccessList()
         }
         trackingPtr.pointee?.addAccess(keyPath: keyPath, context: context)
-    }
-    
-    public func registerObserver<T>(
-        tracking tracker: @autoclosure () -> T,
-        receiving changeType: RunestoneObservation.PropertyChangeType,
-        options: RunestoneObservation.ObservationOptions,
-        handler: @escaping ObservationChangeHandler<T>
-    ) {
-        if let accessList = generateAccessList(tracker) {
-            let tracking = ObservationTracking(accessList)
-            let changeHandler = AnyObservationChangeHandler(handler)
-            tracking.installObserver(receiving: changeType, changeHandler: changeHandler)
-        }
-    }
-}
-
-private extension ObservationRegistrar {
-    private func generateAccessList<T>(_ apply: () -> T) -> ObservationTracking.AccessList? {
-        var accessList: ObservationTracking.AccessList?
-        _ = withUnsafeMutablePointer(to: &accessList) { ptr in
-            let previous = ThreadLocal.value
-            ThreadLocal.value = UnsafeMutableRawPointer(ptr)
-            defer {
-                if let scoped = ptr.pointee, let previous {
-                    if var prevList = previous.assumingMemoryBound(to: ObservationTracking.AccessList?.self).pointee {
-                        prevList.merge(scoped)
-                        previous.assumingMemoryBound(to: ObservationTracking.AccessList?.self).pointee = prevList
-                    } else {
-                        previous.assumingMemoryBound(to: ObservationTracking.AccessList?.self).pointee = scoped
-                    }
-                }
-                ThreadLocal.value = previous
-            }
-            return apply()
-        }
-        return accessList
     }
 }
