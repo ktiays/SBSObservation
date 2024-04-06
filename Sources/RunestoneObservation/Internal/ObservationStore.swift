@@ -19,7 +19,6 @@ final class ObservationStore: ObservationStoring {
     }
 
     func removeObservation(_ observation: StoredObservation) {
-        let oldCount = map.count
         map.removeValue(forKey: observation.id)
         for keyPath in observation.properties {
             guard var ids = lookups[keyPath] else {
