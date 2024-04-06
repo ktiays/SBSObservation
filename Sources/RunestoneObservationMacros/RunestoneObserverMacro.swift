@@ -21,10 +21,39 @@ extension RunestoneObserverMacro: MemberMacro {
         }
         return [
             try makeObserverRegistrarVariable(),
-            try makeObserveFunction()
+            try makeAutoclosureObserveFunction(),
+            try makeClosureObserveFunction()
         ]
     }
 }
+
+extension RunestoneObserverMacro: ExtensionMacro {
+    public static func expansion(
+        of node: AttributeSyntax,
+        attachedTo declaration: some DeclGroupSyntax,
+        providingExtensionsOf type: some TypeSyntaxProtocol,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+    ) throws -> [ExtensionDeclSyntax] {
+        guard let classDecl = declaration.as(ClassDeclSyntax.self) else {
+            let diagnostic = Diagnostic(
+                node: declaration,
+                message: RunestoneMacroDiagnostic.onlyApplicableToClass
+            )
+            context.diagnose(diagnostic)
+            return []
+        }
+        let className = classDecl.name.text
+        return [
+            try ExtensionDeclSyntax(
+               """
+               extension \(raw: className): RunestoneObservation.Observer {}
+               """
+            )
+        ]
+    }
+}
+
 
 private extension RunestoneObserverMacro {
     private static func makeObserverRegistrarVariable() throws -> DeclSyntax {
@@ -36,17 +65,40 @@ private extension RunestoneObserverMacro {
         return DeclSyntax(syntax)
     }
 
-    private static func makeObserveFunction() throws -> DeclSyntax {
+    private static func makeAutoclosureObserveFunction() throws -> DeclSyntax {
         let syntax = try FunctionDeclSyntax(
            """
+           @_disfavoredOverload @discardableResult
            func observe<T>(
                _ tracker: @autoclosure () -> T,
                receiving changeType: RunestoneObservation.PropertyChangeType = .didSet,
                options: RunestoneObservation.ObservationOptions = [],
                handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
-           ) {
+           ) -> RunestoneObservation.Observation {
                _observerRegistrar.registerObserver(
-                   tracking: tracker(),
+                   tracking: tracker,
+                   receiving: changeType,
+                   options: options,
+                   handler: handler
+               )
+           }
+           """
+        )
+        return DeclSyntax(syntax)
+    }
+
+    private static func makeClosureObserveFunction() throws -> DeclSyntax {
+        let syntax = try FunctionDeclSyntax(
+           """
+           @discardableResult
+           func observe<T>(
+               _ tracker: () -> T,
+               receiving changeType: RunestoneObservation.PropertyChangeType = .didSet,
+               options: RunestoneObservation.ObservationOptions = [],
+               handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
+           ) -> RunestoneObservation.Observation {
+               _observerRegistrar.registerObserver(
+                   tracking: tracker,
                    receiving: changeType,
                    options: options,
                    handler: handler

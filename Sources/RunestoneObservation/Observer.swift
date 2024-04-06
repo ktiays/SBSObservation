@@ -1,3 +1,1 @@
-public protocol Observer: AnyObject {
-    func cancelObservation(withId observationId: ObservationId)
-}
+public protocol Observer: AnyObject {}

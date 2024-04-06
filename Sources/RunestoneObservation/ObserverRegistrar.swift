@@ -1,44 +1,66 @@
 public final class ObserverRegistrar {
+    private let observationStore = LockingObservationStore(ObservationStore())
+
     public init() {}
 
     deinit {
-        print("Deinit \(type(of: self))")
+        cancelAllObservations()
     }
 
     public func registerObserver<T>(
-        tracking tracker: @autoclosure () -> T,
+        tracking tracker: () -> T,
         receiving changeType: PropertyChangeType,
         options: ObservationOptions,
         handler: @escaping ObservationChangeHandler<T>
-    ) {
-        guard let accessList = generateAccessList(tracker) else {
-            return
+    ) -> Observation {
+        guard let (value, accessList) = generateAccessList(tracker) else {
+            fatalError("Failed to generate access list")
         }
-        let tracking = ObservationTracking(accessList)
+        defer {
+            if options.contains(.initialValue) {
+                handler(value, value)
+            }
+        }
         let changeHandler = AnyObservationChangeHandler(handler)
-        tracking.installObserver(receiving: changeType, changeHandler: changeHandler)
+        let storedObservations = accessList.entries.values.map { entry in
+            entry.addObserver(
+                receiving: changeType,
+                changeHandler: changeHandler,
+                observationStore: observationStore
+            )
+        }
+        return Observation(storedObservations)
     }
 }
 
 private extension ObserverRegistrar {
-    private func generateAccessList<T>(_ apply: () -> T) -> ObservationTracking.AccessList? {
-        var accessList: ObservationTracking.AccessList?
-        _ = withUnsafeMutablePointer(to: &accessList) { ptr in
+    private func cancelAllObservations() {
+        for observation in observationStore.observations {
+            observation.cancel()
+        }
+    }
+
+    private func generateAccessList<T>(_ tracker: () -> T) -> (T, AccessList)? {
+        var accessList: AccessList?
+        let value = withUnsafeMutablePointer(to: &accessList) { ptr in
             let previous = ThreadLocal.value
             ThreadLocal.value = UnsafeMutableRawPointer(ptr)
             defer {
                 if let scoped = ptr.pointee, let previous {
-                    if var prevList = previous.assumingMemoryBound(to: ObservationTracking.AccessList?.self).pointee {
+                    if var prevList = previous.assumingMemoryBound(to: AccessList?.self).pointee {
                         prevList.merge(scoped)
-                        previous.assumingMemoryBound(to: ObservationTracking.AccessList?.self).pointee = prevList
+                        previous.assumingMemoryBound(to: AccessList?.self).pointee = prevList
                     } else {
-                        previous.assumingMemoryBound(to: ObservationTracking.AccessList?.self).pointee = scoped
+                        previous.assumingMemoryBound(to: AccessList?.self).pointee = scoped
                     }
                 }
                 ThreadLocal.value = previous
             }
-            return apply()
+            return tracker()
         }
-        return accessList
+        guard let accessList else {
+            return nil
+        }
+        return (value, accessList)
     }
 }

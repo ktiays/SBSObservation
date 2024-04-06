@@ -52,9 +52,7 @@ extension RunestoneObservableMacro: MemberMacro {
         }
         let typeName = identified.name.text
         return [
-            try makeObservableRegistrarVariable(forTypeNamed: typeName),
-//            try makeRegisterObserverFunction(forTypeNamed: typeName),
-//            try makeCancelObservationFunction()
+            try makeObservableRegistrarVariable(forTypeNamed: typeName)
         ]
     }
 }
@@ -91,41 +89,6 @@ private extension RunestoneObservableMacro {
         let syntax = try VariableDeclSyntax(
            """
            private let _observableRegistrar = RunestoneObservation.ObservableRegistrar()
-           """
-        )
-        return DeclSyntax(syntax)
-    }
-
-    private static func makeRegisterObserverFunction(forTypeNamed typeName: String) throws -> DeclSyntax {
-        let syntax = try FunctionDeclSyntax(
-           """
-           func registerObserver<T>(
-               _ observer: some RunestoneObservation.Observer,
-               observing keyPath: KeyPath<\(raw: typeName), T>,
-               receiving changeType: RunestoneObservation.PropertyChangeType,
-               options: RunestoneObservation.ObservationOptions = [],
-               handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
-           ) -> RunestoneObservation.ObservationId {
-               _observableRegistrar.registerObserver(
-                   observer,
-                   observing: keyPath,
-                   on: self,
-                   receiving: changeType,
-                   options: options,
-                   handler: handler
-               )
-           }
-           """
-        )
-        return DeclSyntax(syntax)
-    }
-
-    private static func makeCancelObservationFunction() throws -> DeclSyntax {
-        let syntax = try FunctionDeclSyntax(
-           """
-           func cancelObservation(withId observationId: RunestoneObservation.ObservationId) {
-               _observableRegistrar.cancelObservation(withId: observationId)
-           }
            """
         )
         return DeclSyntax(syntax)

@@ -1,10 +1,9 @@
 import Foundation
 
 struct ManagedCriticalState<State> {
-    private let lock = NSLock()
-
     final private class LockedBuffer: ManagedBuffer<State, UnsafeRawPointer> {}
 
+    private let lock = NSLock()
     private let buffer: ManagedBuffer<State, UnsafeRawPointer>
 
     init(_ buffer: ManagedBuffer<State, UnsafeRawPointer>) {
