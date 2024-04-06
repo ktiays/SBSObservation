@@ -37,7 +37,7 @@ struct AccessList: Sendable {
 
     private(set) var entries: [ObjectIdentifier: Entry] = [:]
 
-    mutating func addAccess<Subject: Observable>(
+    mutating func addAccess<Subject>(
         keyPath: PartialKeyPath<Subject>,
         observationStore: ObservationStoring
     ) {

@@ -7,7 +7,7 @@ public final class ObservableRegistrar {
         cancelAllObservations()
     }
 
-    public func withMutation<Subject: Observable, T>(
+    public func withMutation<Subject, T>(
         of keyPath: KeyPath<Subject, T>,
         on observable: Subject,
         changingFrom oldValue: T,
@@ -31,7 +31,7 @@ public final class ObservableRegistrar {
         )
     }
 
-    public func withMutation<Subject: Observable, T: Equatable>(
+    public func withMutation<Subject, T: Equatable>(
         of keyPath: KeyPath<Subject, T>,
         on observable: Subject,
         changingFrom oldValue: T,
@@ -60,7 +60,7 @@ public final class ObservableRegistrar {
         }
     }
 
-    public func access<Subject: Observable, T>(_ keyPath: KeyPath<Subject, T>, on subject: Subject) {
+    public func access<Subject, T>(_ keyPath: KeyPath<Subject, T>, on subject: Subject) {
         guard let trackingPtr = ThreadLocal.value?.assumingMemoryBound(to: AccessList?.self) else {
             return
         }
@@ -78,7 +78,7 @@ private extension ObservableRegistrar {
         }
     }
 
-    private func publishChange<Subject: Observable, T>(
+    private func publishChange<Subject, T>(
         ofType changeType: PropertyChangeType,
         changing keyPath: KeyPath<Subject, T>,
         on subject: Subject,

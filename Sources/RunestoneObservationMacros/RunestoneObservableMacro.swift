@@ -57,33 +57,6 @@ extension RunestoneObservableMacro: MemberMacro {
     }
 }
 
-extension RunestoneObservableMacro: ExtensionMacro {
-    public static func expansion(
-        of node: AttributeSyntax,
-        attachedTo declaration: some DeclGroupSyntax,
-        providingExtensionsOf type: some TypeSyntaxProtocol,
-        conformingTo protocols: [TypeSyntax],
-        in context: some MacroExpansionContext
-    ) throws -> [ExtensionDeclSyntax] {
-        guard let classDecl = declaration.as(ClassDeclSyntax.self) else {
-            let diagnostic = Diagnostic(
-                node: declaration,
-                message: RunestoneMacroDiagnostic.onlyApplicableToClass
-            )
-            context.diagnose(diagnostic)
-            return []
-        }
-        let className = classDecl.name.text
-        return [
-            try ExtensionDeclSyntax(
-               """
-               extension \(raw: className): RunestoneObservation.Observable {}
-               """
-            )
-        ]
-    }
-}
-
 private extension RunestoneObservableMacro {
     private static func makeObservableRegistrarVariable(forTypeNamed typeName: String) throws -> DeclSyntax {
         let syntax = try VariableDeclSyntax(

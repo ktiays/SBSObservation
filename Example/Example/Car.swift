@@ -1,7 +1,7 @@
 import Foundation
 import RunestoneObservation
 
-protocol Car: RunestoneObservation.Observable {
+protocol Car: AnyObject {
     var speed: Int { get set }
 }
 

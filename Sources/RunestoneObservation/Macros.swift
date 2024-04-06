@@ -1,6 +1,5 @@
 @attached(member, names: named(_observableRegistrar))
 @attached(memberAttribute)
-@attached(extension, conformances: Observable)
 public macro RunestoneObservable() = #externalMacro(
     module: "RunestoneObservationMacros",
     type: "RunestoneObservableMacro"
@@ -21,7 +20,6 @@ public macro RunestoneObservationTracked() = #externalMacro(
 
 
 @attached(member, names: named(_observerRegistrar), named(observe), named(cancelObservation))
-@attached(extension, conformances: Observer)
 public macro RunestoneObserver() = #externalMacro(
     module: "RunestoneObservationMacros",
     type: "RunestoneObserverMacro"
