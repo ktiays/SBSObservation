@@ -26,9 +26,6 @@ final class RunestoneObservableMacroTests: XCTestCase {
 
                 private let _observableRegistrar = RunestoneObservation.ObservableRegistrar()
             }
-
-            extension ViewModel: RunestoneObservation.Observable {
-            }
             """,
             macros: testMacros
         )
@@ -57,9 +54,6 @@ final class RunestoneObservableMacroTests: XCTestCase {
 
                 private let _observableRegistrar = RunestoneObservation.ObservableRegistrar()
             }
-
-            extension ViewModel: RunestoneObservation.Observable {
-            }
             """,
             macros: [
                 "RunestoneObservable": RunestoneObservableMacro.self
@@ -86,9 +80,6 @@ final class RunestoneObservableMacroTests: XCTestCase {
                 var foo: String = ""
 
                 private let _observableRegistrar = RunestoneObservation.ObservableRegistrar()
-            }
-
-            extension ViewModel: RunestoneObservation.Observable {
             }
             """,
             macros: [
