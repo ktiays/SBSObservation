@@ -14,7 +14,7 @@ public final class ObserverRegistrar {
         handler: @escaping ObservationChangeHandler<T>
     ) -> Observation {
         guard let (value, accessList) = generateAccessList(tracker) else {
-            fatalError("Failed to generate access list")
+            fatalError("Failed to generate property access list. Make sure not to pass a closure to the observe(_:) function.")
         }
         defer {
             if options.contains(.initialValue) {

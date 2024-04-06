@@ -21,8 +21,7 @@ extension RunestoneObserverMacro: MemberMacro {
         }
         return [
             try makeObserverRegistrarVariable(),
-            try makeAutoclosureObserveFunction(),
-            try makeClosureObserveFunction()
+            try makeObserveFunction()
         ]
     }
 }
@@ -65,34 +64,12 @@ private extension RunestoneObserverMacro {
         return DeclSyntax(syntax)
     }
 
-    private static func makeAutoclosureObserveFunction() throws -> DeclSyntax {
-        let syntax = try FunctionDeclSyntax(
-           """
-           @_disfavoredOverload @discardableResult
-           func observe<T>(
-               _ tracker: @autoclosure () -> T,
-               receiving changeType: RunestoneObservation.PropertyChangeType = .didSet,
-               options: RunestoneObservation.ObservationOptions = [],
-               handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
-           ) -> RunestoneObservation.Observation {
-               _observerRegistrar.registerObserver(
-                   tracking: tracker,
-                   receiving: changeType,
-                   options: options,
-                   handler: handler
-               )
-           }
-           """
-        )
-        return DeclSyntax(syntax)
-    }
-
-    private static func makeClosureObserveFunction() throws -> DeclSyntax {
+    private static func makeObserveFunction() throws -> DeclSyntax {
         let syntax = try FunctionDeclSyntax(
            """
            @discardableResult
            func observe<T>(
-               _ tracker: () -> T,
+               _ tracker: @autoclosure () -> T,
                receiving changeType: RunestoneObservation.PropertyChangeType = .didSet,
                options: RunestoneObservation.ObservationOptions = [],
                handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
