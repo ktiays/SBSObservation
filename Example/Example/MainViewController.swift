@@ -23,7 +23,7 @@ final class MainViewController<CarType: Car>: UIViewController {
         super.viewDidLoad()
         // 👀 Observe the speed of the car. Get the initial value so our view is up-to-date when presented.
         observe(car.speed, options: .initialValue) { [unowned self] oldValue, newValue in
-            self.contentView.speedLabel.text = "\(newValue) km/h"
+            contentView.speedLabel.text = "\(newValue) km/h"
         }
         // 🔘 Configure the buttons in the view.
         contentView.presentButton.addTarget(self, action: #selector(presentNextScreen), for: .touchUpInside)
