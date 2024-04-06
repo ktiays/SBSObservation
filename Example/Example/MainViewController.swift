@@ -26,7 +26,7 @@ final class MainViewController<CarType: Car>: UIViewController {
             contentView.speedLabel.text = "\(newValue) km/h"
         }
         // 🔘 Configure the buttons in the view.
-        contentView.presentButton.addTarget(self, action: #selector(presentNextScreen), for: .touchUpInside)
+        contentView.presentButton.addTarget(self, action: #selector(presentSpeedometer), for: .touchUpInside)
         contentView.decreaseSpeedButton.addTarget(self, action: #selector(decreaseSpeed), for: .touchUpInside)
         contentView.increaseSpeedButton.addTarget(self, action: #selector(increaseSpeed), for: .touchUpInside)
     }
@@ -41,7 +41,7 @@ final class MainViewController<CarType: Car>: UIViewController {
         car.speed += 1
     }
 
-    @objc private func presentNextScreen() {
+    @objc private func presentSpeedometer() {
         let viewController = MainViewController(car: car)
         navigationController?.pushViewController(viewController, animated: true)
     }
