@@ -5,7 +5,7 @@ public final class Observation {
         self.storedObservations = storedObservations
     }
 
-    func cancel() {
+    public func cancel() {
         for storedObservation in storedObservations {
             storedObservation.cancel()
         }
