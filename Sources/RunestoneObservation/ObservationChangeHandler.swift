@@ -1,1 +1,1 @@
-public typealias ObservationChangeHandler<T> = @Sendable (T, T) -> Void
+public typealias ObservationChangeHandler<T> = (T, T) -> Void
