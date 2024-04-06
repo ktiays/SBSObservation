@@ -6,7 +6,7 @@ import CompilerPluginSupport
 
 let package = Package(
     name: "RunestoneObservation",
-    platforms: [.macOS(.v10_15), .iOS(.v13)],
+    platforms: [.macOS(.v10_15), .iOS(.v12)],
     products: [
         .library(name: "RunestoneObservation", targets: [
             "RunestoneObservation"
