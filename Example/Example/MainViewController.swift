@@ -21,19 +21,23 @@ final class MainViewController<CarType: Car>: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // 👀 Observe the speed of the car. Get the initial value so our view is up-to-date when presented.
         observe(car.speed, options: .initialValue) { [unowned self] oldValue, newValue in
             self.contentView.speedLabel.text = "\(newValue) km/h"
         }
+        // 🔘 Configure the buttons in the view.
         contentView.presentButton.addTarget(self, action: #selector(presentNextScreen), for: .touchUpInside)
         contentView.decreaseSpeedButton.addTarget(self, action: #selector(decreaseSpeed), for: .touchUpInside)
         contentView.increaseSpeedButton.addTarget(self, action: #selector(increaseSpeed), for: .touchUpInside)
     }
 
     @objc private func decreaseSpeed() {
+        // Change speed of car, causing the UI to be updated through observation.
         car.speed -= 1
     }
 
     @objc private func increaseSpeed() {
+        // Another example of changing the speed of the car.
         car.speed += 1
     }
 
