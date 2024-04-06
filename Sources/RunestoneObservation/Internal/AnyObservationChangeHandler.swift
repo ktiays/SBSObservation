@@ -1,6 +1,6 @@
 import Foundation
 
-struct AnyObservationChangeHandler: Sendable {
+struct AnyObservationChangeHandler {
     private enum ObservationError: LocalizedError {
         case mismatchOldValueType(expectedType: Any.Type, actualType: Any.Type)
         case mismatchNewValueType(expectedType: Any.Type, actualType: Any.Type)
@@ -15,9 +15,9 @@ struct AnyObservationChangeHandler: Sendable {
         }
     }
 
-    private let handler: @Sendable (Any, Any) throws -> Void
+    private let handler: (Any, Any) throws -> Void
 
-    init<T>(_ handler: @Sendable @escaping (T, T) -> Void) {
+    init<T>(_ handler: @escaping (T, T) -> Void) {
         self.handler = { oldValue, newValue in
             guard let typedOldValue = oldValue as? T else {
                 throw ObservationError.mismatchOldValueType(
