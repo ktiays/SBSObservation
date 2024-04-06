@@ -26,7 +26,7 @@ final class MainViewController<CarType: Car>: UIViewController {
             print("B \(oldValue) => \(newValue)")
         }
         contentView.presentButton.addTarget(self, action: #selector(presentNextScreen), for: .touchUpInside)
-        contentView.increaseSpeedButton.addTarget(self, action: #selector(decreaseSpeed), for: .touchUpInside)
+        contentView.decreaseSpeedButton.addTarget(self, action: #selector(decreaseSpeed), for: .touchUpInside)
         contentView.increaseSpeedButton.addTarget(self, action: #selector(increaseSpeed), for: .touchUpInside)
         speedUp()
     }
