@@ -1,12 +1,13 @@
 import RunestoneObservation
 import UIKit
 
+// 👀 The view controller is an observer and observes the car it is initialized with.
 @RunestoneObserver
-final class MainViewController<CarType: Car>: UIViewController {
-    private let car: CarType
+final class MainViewController: UIViewController {
+    private let car: Car
     private let contentView = MainView()
 
-    init(car: CarType) {
+    init(car: Car) {
         self.car = car
         super.init(nibName: nil, bundle: nil)
     }
