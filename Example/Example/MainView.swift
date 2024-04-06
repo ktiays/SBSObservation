@@ -1,16 +1,23 @@
 import UIKit
 
 final class MainView: UIView {
+    private let carLabel: UILabel = {
+        let this = UILabel()
+        this.text = "🚘"
+        this.font = .systemFont(ofSize: 64)
+        this.textAlignment = .center
+        return this
+    }()
     let speedLabel: UILabel = {
         let this = UILabel()
-        this.text = "0 mph"
-        this.font = .preferredFont(forTextStyle: .title1)
+        this.text = "0 km/h"
+        this.font = .monospacedDigitSystemFont(ofSize: 32, weight: .regular)
         this.textAlignment = .center
         return this
     }()
     let presentButton: UIButton = {
         let this = UIButton(configuration: .bordered())
-        this.configuration?.title = "Present"
+        this.configuration?.title = "Present Speedometer"
         return this
     }()
     let decreaseSpeedButton: UIButton = {
@@ -23,7 +30,7 @@ final class MainView: UIView {
         this.configuration?.image = UIImage(systemName: "arrowtriangle.up.square")
         return this
     }()
-    private let buttonsStackView: UIStackView = {
+    private let speedStackView: UIStackView = {
         let this = UIStackView()
         this.translatesAutoresizingMaskIntoConstraints = false
         this.axis = .horizontal
@@ -52,12 +59,13 @@ final class MainView: UIView {
 
     private func setupView() {
         backgroundColor = .systemBackground
-        buttonsStackView.addArrangedSubview(decreaseSpeedButton)
-        buttonsStackView.addArrangedSubview(increaseSpeedButton)
-        contentStackView.addArrangedSubview(speedLabel)
-        contentStackView.addArrangedSubview(buttonsStackView)
+        speedStackView.addArrangedSubview(decreaseSpeedButton)
+        speedStackView.addArrangedSubview(speedLabel)
+        speedStackView.addArrangedSubview(increaseSpeedButton)
+        contentStackView.addArrangedSubview(carLabel)
+        contentStackView.addArrangedSubview(speedStackView)
         contentStackView.addArrangedSubview(presentButton)
-        contentStackView.setCustomSpacing(80, after: buttonsStackView)
+        contentStackView.setCustomSpacing(80, after: speedStackView)
         addSubview(contentStackView)
     }
 

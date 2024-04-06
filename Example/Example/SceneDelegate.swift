@@ -9,7 +9,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         let windowScene = scene as! UIWindowScene
-        let mainViewController = MainViewController(carA: Volvo(), carB: Volvo())
+        let mainViewController = MainViewController(car: Volvo())
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = UINavigationController(rootViewController: mainViewController)
         window?.makeKeyAndVisible()
