@@ -1,9 +1,6 @@
 import Foundation
 
 final class ObservationStore: ObservationStoring {
-    var id: ObjectIdentifier {
-        ObjectIdentifier(self)
-    }
     var observations: [StoredObservation] {
         Array(map.values)
     }

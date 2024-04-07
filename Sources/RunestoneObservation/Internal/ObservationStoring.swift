@@ -8,3 +8,9 @@ protocol ObservationStoring {
         receiving changeType: PropertyChangeType
     ) -> [StoredObservation]
 }
+
+extension ObservationStoring where Self: AnyObject {
+    var id: ObjectIdentifier {
+        ObjectIdentifier(self)
+    }
+}

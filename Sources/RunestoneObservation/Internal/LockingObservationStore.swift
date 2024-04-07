@@ -1,7 +1,4 @@
 final class LockingObservationStore<DecoratedObservationStore: ObservationStoring>: ObservationStoring {
-    var id: ObjectIdentifier {
-        ObjectIdentifier(self)
-    }
     var observations: [StoredObservation] {
         state.withCriticalRegion { $0.observations }
     }
