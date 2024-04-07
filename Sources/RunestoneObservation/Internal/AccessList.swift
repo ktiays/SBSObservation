@@ -2,7 +2,7 @@ struct AccessList: Sendable {
     struct Entry: @unchecked Sendable {
         let observableObservationStore: ObservationStoring
 
-        private var properties: Set<AnyKeyPath>
+        private(set) var properties: Set<AnyKeyPath>
 
         init(_ observationStore: ObservationStoring, properties: Set<AnyKeyPath> = []) {
             self.observableObservationStore = observationStore
