@@ -5,8 +5,8 @@ final class ObservationStore: ObservationStoring {
         Array(map.values)
     }
 
-    private var map: [UUID: StoredObservation] = [:]
-    private var lookups: [AnyKeyPath: Set<UUID>] = [:]
+    private var map: [StoredObservation.Id: StoredObservation] = [:]
+    private var lookups: [AnyKeyPath: Set<StoredObservation.Id>] = [:]
 
     func addObservation(_ observation: StoredObservation) {
         map[observation.id] = observation

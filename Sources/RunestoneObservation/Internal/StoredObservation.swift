@@ -1,7 +1,11 @@
 import Foundation
 
 struct StoredObservation {
-    let id = UUID()
+    struct Id: Hashable {
+        private let id = UUID()
+    }
+    
+    let id = Id()
     let properties: Set<AnyKeyPath>
     let changeType: PropertyChangeType
     let changeHandler: AnyObservationChangeHandler
