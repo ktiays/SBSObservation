@@ -1,7 +1,13 @@
 public final class ObservableRegistrar {
-    private let observationStore = LockingObservationStore(ObservationStore())
+    private let observationStore: ObservationStoring
 
-    public init() {}
+    public init() {
+        observationStore = LockingObservationStore(ObservationStore())
+    }
+
+    init(observationStore: ObservationStoring) {
+        self.observationStore = observationStore
+    }
 
     deinit {
         cancelAllObservations()
