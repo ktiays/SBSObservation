@@ -40,7 +40,7 @@ private extension RunestoneObserverMacro {
         let syntax = try FunctionDeclSyntax(
            """
            @discardableResult
-           func observe<T>(
+           private func observe<T>(
                _ tracker: @autoclosure () -> T,
                receiving changeType: RunestoneObservation.PropertyChangeType = .didSet,
                options: RunestoneObservation.ObservationOptions = [],
