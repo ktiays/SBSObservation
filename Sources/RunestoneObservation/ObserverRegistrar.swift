@@ -10,7 +10,7 @@ public final class ObserverRegistrar {
     public func registerObserver<T>(
         tracking tracker: () -> T,
         receiving changeType: PropertyChangeType,
-        options: ObservationOptions,
+        options: ObservationOptions = [],
         handler: @escaping ObservationChangeHandler<T>
     ) -> Observation {
         guard let (value, accessList) = generateAccessList(tracker) else {
