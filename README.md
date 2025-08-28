@@ -5,7 +5,7 @@
 > 
 > The source code is provided as-is, without any guarantees of correctness, stability, or future maintenance. Use it at your own risk.
 
-Tiny observation framework designed for UIKit-based apps and built with Swift macros. It automatically handles deallocation of observations supports iOS 12 and newer.
+Tiny observation framework designed for UIKit-based apps and built with Swift macros. It automatically handles the deallocation of observations and supports iOS 12 and newer.
 
 ```swift
 @SBSObservable
