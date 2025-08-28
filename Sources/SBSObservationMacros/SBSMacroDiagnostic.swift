@@ -1,6 +1,6 @@
 import SwiftDiagnostics
 
-enum RunestoneMacroDiagnostic: String, DiagnosticMessage {
+enum SBSMacroDiagnostic: String, DiagnosticMessage {
     case missingArgument
     case notAKeyPath
     case onlyApplicableToClass
@@ -9,7 +9,7 @@ enum RunestoneMacroDiagnostic: String, DiagnosticMessage {
         .error
     }
     var diagnosticID: MessageID {
-        MessageID(domain: "RunestonenMacros", id: rawValue)
+        MessageID(domain: "SBSnMacros", id: rawValue)
     }
     var message: String {
         switch self {

@@ -1,20 +1,20 @@
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
-#if canImport(RunestoneObservationMacros)
-import RunestoneObservationMacros
+#if canImport(SBSObservationMacros)
+import SBSObservationMacros
 
 private let testMacros: [String: Macro.Type] = [
-    "RunestoneObserver": RunestoneObserverMacro.self
+    "SBSObserver": SBSObserverMacro.self
 ]
 #endif
 
-final class RunestoneObserverMacroTests: XCTestCase {
+final class SBSObserverMacroTests: XCTestCase {
     func test_it_generates_observer_conformance() throws {
-        #if canImport(RunestoneObservationMacros)
+        #if canImport(SBSObservationMacros)
         assertMacroExpansion(
             """
-            @RunestoneObserver
+            @SBSObserver
             final class ViewModel {
 
             }
@@ -22,15 +22,15 @@ final class RunestoneObserverMacroTests: XCTestCase {
             expandedSource: """
             final class ViewModel {
 
-                private let _observerRegistrar = RunestoneObservation.ObserverRegistrar()
+                private let _observerRegistrar = SBSObservation.ObserverRegistrar()
 
                 @discardableResult
                 private func observe<T>(
                     _ tracker: @autoclosure () -> T,
-                    receiving changeType: RunestoneObservation.PropertyChangeType = .didSet,
-                    options: RunestoneObservation.ObservationOptions = [],
-                    handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
-                ) -> RunestoneObservation.Observation {
+                    receiving changeType: SBSObservation.PropertyChangeType = .didSet,
+                    options: SBSObservation.ObservationOptions = [],
+                    handler: @escaping SBSObservation.ObservationChangeHandler<T>
+                ) -> SBSObservation.Observation {
                     _observerRegistrar.registerObserver(
                         tracking: tracker,
                         receiving: changeType,

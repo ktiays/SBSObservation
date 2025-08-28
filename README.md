@@ -1,4 +1,4 @@
-# RunestoneObservation
+# SBSObservation
 
 > [!IMPORTANT]
 > This framework is an experimental project that reimplements and backports parts of Apple’s [Observation](https://github.com/swiftlang/swift/tree/main/stdlib/public/Observation/Sources/Observation) framework to iOS 12, with similar internals and a more ergonomic API.
@@ -8,12 +8,12 @@
 Tiny observation framework designed for UIKit-based apps and built with Swift macros. It automatically handles deallocation of observations supports iOS 12 and newer.
 
 ```swift
-@RunestoneObservable
+@SBSObservable
 final class Car {
     var speed: Int = 0
 }
 
-@RunestoneObserver
+@SBSObserver
 final class MainViewController: UIViewController {
     private let car = Car()
 

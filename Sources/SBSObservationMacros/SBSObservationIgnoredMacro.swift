@@ -3,7 +3,7 @@ import SwiftCompilerPluginMessageHandling
 import SwiftSyntaxMacros
 import SwiftDiagnostics
 
-public struct RunestoneObservationIgnoredMacro: AccessorMacro {
+public struct SBSObservationIgnoredMacro: AccessorMacro {
     public static func expansion(
         of node: AttributeSyntax,
         providingAccessorsOf declaration: some DeclSyntaxProtocol,

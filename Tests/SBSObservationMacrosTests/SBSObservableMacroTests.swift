@@ -1,30 +1,30 @@
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
-#if canImport(RunestoneObservationMacros)
-import RunestoneObservationMacros
+#if canImport(SBSObservationMacros)
+import SBSObservationMacros
 
 private let testMacros: [String: Macro.Type] = [
-    "RunestoneObservable": RunestoneObservableMacro.self
+    "SBSObservable": SBSObservableMacro.self
 ]
 #endif
 
-final class RunestoneObservableMacroTests: XCTestCase {
+final class SBSObservableMacroTests: XCTestCase {
     func test_it_generates_observable_conformance() throws {
-        #if canImport(RunestoneObservationMacros)
+        #if canImport(SBSObservationMacros)
         assertMacroExpansion(
             """
-            @RunestoneObservable
+            @SBSObservable
             final class ViewModel {
                 var foo: String = ""
             }
             """,
             expandedSource: """
             final class ViewModel {
-                @RunestoneObservationTracked
+                @SBSObservationTracked
                 var foo: String = ""
 
-                private let _observableRegistrar = RunestoneObservation.ObservableRegistrar()
+                private let _observableRegistrar = SBSObservation.ObservableRegistrar()
             }
             """,
             macros: testMacros
@@ -34,29 +34,29 @@ final class RunestoneObservableMacroTests: XCTestCase {
         #endif
     }
 
-    func test_it_skips_tracking_properties_withRunestoneObservationignored_annotation() throws {
-        #if canImport(RunestoneObservationMacros)
+    func test_it_skips_tracking_properties_withSBSObservationignored_annotation() throws {
+        #if canImport(SBSObservationMacros)
         assertMacroExpansion(
             """
-            @RunestoneObservable
+            @SBSObservable
             final class ViewModel {
                 var foo: String = ""
-                @RunestoneObservationIgnored
+                @SBSObservationIgnored
                 var bar: String = ""
             }
             """,
             expandedSource: """
             final class ViewModel {
-                @RunestoneObservationTracked
+                @SBSObservationTracked
                 var foo: String = ""
-                @RunestoneObservationIgnored
+                @SBSObservationIgnored
                 var bar: String = ""
 
-                private let _observableRegistrar = RunestoneObservation.ObservableRegistrar()
+                private let _observableRegistrar = SBSObservation.ObservableRegistrar()
             }
             """,
             macros: [
-                "RunestoneObservable": RunestoneObservableMacro.self
+                "SBSObservable": SBSObservableMacro.self
             ]
         )
         #else
@@ -64,26 +64,26 @@ final class RunestoneObservableMacroTests: XCTestCase {
         #endif
     }
 
-    func test_it_skips_addingRunestoneObservationtracked_annotation_when_already_added() throws {
-        #if canImport(RunestoneObservationMacros)
+    func test_it_skips_addingSBSObservationtracked_annotation_when_already_added() throws {
+        #if canImport(SBSObservationMacros)
         assertMacroExpansion(
             """
-            @RunestoneObservable
+            @SBSObservable
             final class ViewModel {
-                @RunestoneObservationTracked
+                @SBSObservationTracked
                 var foo: String = ""
             }
             """,
             expandedSource: """
             final class ViewModel {
-                @RunestoneObservationTracked
+                @SBSObservationTracked
                 var foo: String = ""
 
-                private let _observableRegistrar = RunestoneObservation.ObservableRegistrar()
+                private let _observableRegistrar = SBSObservation.ObservableRegistrar()
             }
             """,
             macros: [
-                "RunestoneObservable": RunestoneObservableMacro.self
+                "SBSObservable": SBSObservableMacro.self
             ]
         )
         #else

@@ -3,9 +3,9 @@ import SwiftCompilerPluginMessageHandling
 import SwiftSyntaxMacros
 import SwiftDiagnostics
 
-public struct RunestoneObserverMacro {}
+public struct SBSObserverMacro {}
 
-extension RunestoneObserverMacro: MemberMacro {
+extension SBSObserverMacro: MemberMacro {
     public static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
@@ -14,7 +14,7 @@ extension RunestoneObserverMacro: MemberMacro {
         guard declaration.is(ClassDeclSyntax.self) else {
             let diagnostic = Diagnostic(
                 node: declaration,
-                message: RunestoneMacroDiagnostic.onlyApplicableToClass
+                message: SBSMacroDiagnostic.onlyApplicableToClass
             )
             context.diagnose(diagnostic)
             return []
@@ -26,11 +26,11 @@ extension RunestoneObserverMacro: MemberMacro {
     }
 }
 
-private extension RunestoneObserverMacro {
+private extension SBSObserverMacro {
     private static func makeObserverRegistrarVariable() throws -> DeclSyntax {
         let syntax = try VariableDeclSyntax(
            """
-           private let _observerRegistrar = RunestoneObservation.ObserverRegistrar()
+           private let _observerRegistrar = SBSObservation.ObserverRegistrar()
            """
         )
         return DeclSyntax(syntax)
@@ -42,10 +42,10 @@ private extension RunestoneObserverMacro {
            @discardableResult
            private func observe<T>(
                _ tracker: @autoclosure () -> T,
-               receiving changeType: RunestoneObservation.PropertyChangeType = .didSet,
-               options: RunestoneObservation.ObservationOptions = [],
-               handler: @escaping RunestoneObservation.ObservationChangeHandler<T>
-           ) -> RunestoneObservation.Observation {
+               receiving changeType: SBSObservation.PropertyChangeType = .didSet,
+               options: SBSObservation.ObservationOptions = [],
+               handler: @escaping SBSObservation.ObservationChangeHandler<T>
+           ) -> SBSObservation.Observation {
                _observerRegistrar.registerObserver(
                    tracking: tracker,
                    receiving: changeType,

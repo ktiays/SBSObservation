@@ -1,12 +1,12 @@
 import Foundation
-import RunestoneObservation
+import SBSObservation
 
 protocol Car: AnyObject {
     var speed: Int { get set }
 }
 
 // ♻️ The car is an observable object.
-@RunestoneObservable
+@SBSObservable
 final class Volvo: Car {
     var speed: Int = 0
 }

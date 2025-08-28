@@ -1,8 +1,8 @@
-import RunestoneObservation
+import SBSObservation
 import UIKit
 
 // 👀 The view controller is an observer and observes the car it is initialized with.
-@RunestoneObserver
+@SBSObserver
 final class MainViewController: UIViewController {
     private let car: Car
     private let contentView = MainView()

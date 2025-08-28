@@ -3,11 +3,11 @@ import SwiftCompilerPluginMessageHandling
 import SwiftSyntaxMacros
 import SwiftDiagnostics
 
-public struct RunestoneObservationTrackedMacro {}
+public struct SBSObservationTrackedMacro {}
 
-extension RunestoneObservationTrackedMacro: AccessorMacro {
-    private static let trackedMacroName = "RunestoneObservationTracked"
-    private static let ignoredMacroName = "RunestoneObservationIgnored"
+extension SBSObservationTrackedMacro: AccessorMacro {
+    private static let trackedMacroName = "SBSObservationTracked"
+    private static let ignoredMacroName = "SBSObservationIgnored"
 
     public static func expansion(
         of node: AttributeSyntax,
@@ -51,7 +51,7 @@ extension RunestoneObservationTrackedMacro: AccessorMacro {
     }
 }
 
-extension RunestoneObservationTrackedMacro: PeerMacro {
+extension SBSObservationTrackedMacro: PeerMacro {
     public static func expansion(
         of node: AttributeSyntax,
         providingPeersOf declaration: some DeclSyntaxProtocol,

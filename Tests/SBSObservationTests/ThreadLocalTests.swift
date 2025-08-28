@@ -1,4 +1,4 @@
-@testable import RunestoneObservation
+@testable import SBSObservation
 import XCTest
 
 final class ThreadLocalTests: XCTestCase {

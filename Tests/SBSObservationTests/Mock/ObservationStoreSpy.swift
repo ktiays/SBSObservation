@@ -1,4 +1,4 @@
-@testable import RunestoneObservation
+@testable import SBSObservation
 
 final class ObservationStoreSpy: ObservationStoring {
     private(set) var observations: [StoredObservation] = []

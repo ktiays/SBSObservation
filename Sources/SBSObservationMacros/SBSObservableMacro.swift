@@ -3,11 +3,11 @@ import SwiftCompilerPluginMessageHandling
 import SwiftSyntaxMacros
 import SwiftDiagnostics
 
-public struct RunestoneObservableMacro {}
+public struct SBSObservableMacro {}
 
-extension RunestoneObservableMacro: MemberAttributeMacro {
-    private static let trackedMacroName = "RunestoneObservationTracked"
-    private static let ignoredMacroName = "RunestoneObservationIgnored"
+extension SBSObservableMacro: MemberAttributeMacro {
+    private static let trackedMacroName = "SBSObservationTracked"
+    private static let ignoredMacroName = "SBSObservationIgnored"
 
     public static func expansion(
         of node: AttributeSyntax,
@@ -33,7 +33,7 @@ extension RunestoneObservableMacro: MemberAttributeMacro {
     }
 }
 
-extension RunestoneObservableMacro: MemberMacro {
+extension SBSObservableMacro: MemberMacro {
     public static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
@@ -46,7 +46,7 @@ extension RunestoneObservableMacro: MemberMacro {
             throw DiagnosticsError(diagnostics: [
                 Diagnostic(
                     node: declaration,
-                    message: RunestoneMacroDiagnostic.onlyApplicableToClass
+                    message: SBSMacroDiagnostic.onlyApplicableToClass
                 )
             ])
         }
@@ -57,11 +57,11 @@ extension RunestoneObservableMacro: MemberMacro {
     }
 }
 
-private extension RunestoneObservableMacro {
+private extension SBSObservableMacro {
     private static func makeObservableRegistrarVariable(forTypeNamed typeName: String) throws -> DeclSyntax {
         let syntax = try VariableDeclSyntax(
            """
-           private let _observableRegistrar = RunestoneObservation.ObservableRegistrar()
+           private let _observableRegistrar = SBSObservation.ObservableRegistrar()
            """
         )
         return DeclSyntax(syntax)

@@ -1,4 +1,4 @@
-@testable import RunestoneObservation
+@testable import SBSObservation
 
 struct MyEquatableType: Equatable {
     let str: String
@@ -16,7 +16,7 @@ struct MyNonEquatableType {
     }
 }
 
-@RunestoneObservable
+@SBSObservable
 final class MockObservable {
     var str = "foo"
     let equatableObj = MyEquatableType("foo")

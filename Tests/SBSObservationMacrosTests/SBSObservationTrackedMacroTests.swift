@@ -1,21 +1,21 @@
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
-#if canImport(RunestoneObservationMacros)
-import RunestoneObservationMacros
+#if canImport(SBSObservationMacros)
+import SBSObservationMacros
 
 private let testMacros: [String: Macro.Type] = [
-    "RunestoneObservationTracked": RunestoneObservationTrackedMacro.self
+    "SBSObservationTracked": SBSObservationTrackedMacro.self
 ]
 #endif
 
-final class RunestoneObservationTrackedMacroTests: XCTestCase {
+final class SBSObservationTrackedMacroTests: XCTestCase {
     func test_it_generates_will_set_and_did_set() throws {
-        #if canImport(RunestoneObservationMacros)
+        #if canImport(SBSObservationMacros)
         assertMacroExpansion(
             """
             final class ViewModel {
-                @RunestoneObservationTracked
+                @SBSObservationTracked
                 var foo: String = ""
             }
             """,
